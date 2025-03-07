@@ -35,6 +35,8 @@ public:
   std::vector<std::vector<Tile>> GetRuns() const;
   // if both vectors are empty - no solution possible
 
+  void print_solution();
+
 private:
   // Enables the printing of debug data
   bool debug_print{false};

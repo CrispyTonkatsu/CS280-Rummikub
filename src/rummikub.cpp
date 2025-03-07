@@ -9,6 +9,8 @@
 #include "rummikub.h"
 #include <algorithm>
 #include <iosfwd>
+#include <iostream>
+#include <ostream>
 
 // NOTE: The proffessor recommends making it work first and then optimizing.
 
@@ -135,12 +137,20 @@ void RummiKub::Solve() {
   solver_recurse(0, actions);
   tiles.clear();
 
+  print_runs();
+  print_groups();
+
   dbg("\nSolver terminated\n");
 }
 
 std::vector<std::vector<Tile>> RummiKub::GetGroups() const { return groups; }
 
 std::vector<std::vector<Tile>> RummiKub::GetRuns() const { return runs; }
+
+void RummiKub::print_solution() {
+  print_runs();
+  print_groups();
+}
 
 bool RummiKub::validate_solution() {
   dbg("Validating Solution start\n");
@@ -165,7 +175,6 @@ bool RummiKub::validate_solution() {
 
 bool RummiKub::solver_recurse(
     size_t current_tile, std::vector<std::unique_ptr<Action>> &actions) {
-  print_runs();
   if (current_tile == tiles.size()) {
     return validate_solution();
   }
@@ -243,31 +252,32 @@ RummiKub::AddToGroup::AddToGroup(std::vector<std::vector<Tile>> &groups) :
     groups(groups) {}
 
 bool RummiKub::AddToGroup::execute(const Tile &tile) {
-  std::pair<bool, size_t> denom_index = find_index_by(
+  std::pair<bool, size_t> denom_index = find_index_qualified(
       groups,
-      [tile](const std::vector<Tile> &vec) -> bool { //
-        return vec.size() > 0 && //
-               vec.at(0).denomination == tile.denomination &&
-               vec.size() + 1 < 4;
+      [tile](const std::vector<Tile> &group) -> bool {
+        // Check if the tile is the right denomination
+        if (group.empty() || (group.at(0).denomination != tile.denomination) ||
+            group.size() == 4) {
+          return false;
+        };
+
+        // Check if the color is already in the run
+        for (const Tile &current_tile: group) {
+          if (tile.color == current_tile.color) {
+            return false;
+          }
+        }
+
+        return true;
+      },
+      [](const std::vector<Tile> &max,
+         const std::vector<Tile> &current) -> bool {
+        // making sure that it is the smallest possible group to add to
+        return current.size() < max.size();
       });
 
-  if (not denom_index.first) {
-    return false;
-  }
-
-  std::vector<Tile> &group = groups.at(denom_index.second);
-  if (group.size() + 1 > 4) {
-    return false;
-  }
-
-  std::pair<bool, size_t> index_with_denom = find_index_by(
-      group,
-      [tile](const Tile &current_tile) -> bool { //
-        return tile.color == current_tile.color;
-      });
-
-  if (!index_with_denom.first) {
-    group.push_back(tile);
+  if (denom_index.first) {
+    groups.at(denom_index.second).push_back(tile);
     inserts.push_back(denom_index.second);
     return true;
   }
@@ -309,7 +319,7 @@ bool RummiKub::validate_run(std::vector<Tile> &run) {
     return false;
   }
 
-  std::vector<Tile> sorted_run = run;
+  std::vector<Tile> sorted_run{run};
   std::sort(
       sorted_run.begin(),
       sorted_run.end(),

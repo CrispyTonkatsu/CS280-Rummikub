@@ -14,11 +14,13 @@ bool CheckSolution(
   // check tiles in solution are legal
   for (auto const &r: runs) {
     for (Tile const &t: r) {
-      auto it = std::find_if(original_hand.begin(), original_hand.end(), [&t](Tile const &t1) {
-        return t.color == t1.color && t.denomination == t1.denomination;
-      });
+      auto it = std::find_if(
+          original_hand.begin(), original_hand.end(), [&t](Tile const &t1) {
+            return t.color == t1.color && t.denomination == t1.denomination;
+          });
       if (it == original_hand.end()) {
-        std::cout << "Tile " << t << " in solution was not in the original hand or duplicate\n";
+        std::cout << "Tile " << t
+                  << " in solution was not in the original hand or duplicate\n";
         correct = false;
       } else {
         original_hand.erase(it);
@@ -27,11 +29,13 @@ bool CheckSolution(
   }
   for (auto const &g: groups) {
     for (Tile const &t: g) {
-      auto it = std::find_if(original_hand.begin(), original_hand.end(), [&t](Tile const &t1) {
-        return t.color == t1.color && t.denomination == t1.denomination;
-      });
+      auto it = std::find_if(
+          original_hand.begin(), original_hand.end(), [&t](Tile const &t1) {
+            return t.color == t1.color && t.denomination == t1.denomination;
+          });
       if (it == original_hand.end()) {
-        std::cout << "Tile " << t << " in solution was not in the original hand or duplicate\n";
+        std::cout << "Tile " << t
+                  << " in solution was not in the original hand or duplicate\n";
         correct = false;
       } else {
         original_hand.erase(it);
@@ -209,7 +213,8 @@ void test2() {
   std::vector<std::vector<Tile>> runs = rks.GetRuns();
   std::vector<std::vector<Tile>> groups = rks.GetGroups();
 
-  if (runs.size() == 0 && groups.size() == 0) { // there is NO solution to this problem
+  if (runs.size() == 0 &&
+      groups.size() == 0) { // there is NO solution to this problem
     std::cout << "Solved correctly (no solution)\n";
   } else {
     std::cout << "Solved incorrectly (non-existing solution found)\n";
@@ -217,14 +222,18 @@ void test2() {
 }
 
 #include <random>
-std::vector<Tile> GenerateRandomSolvable(int num_runs, int max_run_length = 13, int num_groups = 0) {
+std::vector<Tile> GenerateRandomSolvable(
+    int num_runs, int max_run_length = 13, int num_groups = 0) {
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<int> dis_group_denomination(0, 12); // random denomination
-  std::uniform_int_distribution<int> dis_group_length(3, 4); // random length 3 or 4
+  std::uniform_int_distribution<int> dis_group_denomination(
+      0, 12); // random denomination
+  std::uniform_int_distribution<int> dis_group_length(
+      3, 4); // random length 3 or 4
   std::uniform_int_distribution<int> dis_run_color(0, 3); // random run color
   std::uniform_int_distribution<int> dis_run_start(0, 10); // random run start
-  std::uniform_int_distribution<int> dis_rand(0, 10000000); // random number to be used in other cases
+  std::uniform_int_distribution<int> dis_rand(
+      0, 10000000); // random number to be used in other cases
 
   std::vector<Tile> tiles;
 
@@ -256,8 +265,11 @@ std::vector<Tile> GenerateRandomSolvable(int num_runs, int max_run_length = 13, 
   // create runs
   for (int i = 0; i < num_runs; ++i) {
     int start = dis_run_start(gen);
-    int end = start + 3 + dis_rand(gen) % (std::min(13, start + max_run_length) + 1 - 3 - start);
-    // std::cerr << "create run from " << start << " to " << end << " of len " << end-start << std::endl;
+    int end =
+        start + 3 +
+        dis_rand(gen) % (std::min(13, start + max_run_length) + 1 - 3 - start);
+    // std::cerr << "create run from " << start << " to " << end << " of len "
+    // << end-start << std::endl;
     Color col = static_cast<Color>(dis_run_color(gen));
     for (int d = start; d < end; ++d) {
       tiles.push_back({d, col});
@@ -286,10 +298,17 @@ void test3()
     std::cout << "Solved correctly\n";
   } else {
     std::cout << "Solved incorrectly\n";
+    rks.print_solution();
   }
 }
 
-void (*pTests[])(void) = {test0, test1, test2, test3};
+void test4() {
+  for (size_t i = 0; i < 1000; i++) {
+    test3();
+  }
+}
+
+void (*pTests[])(void) = {test0, test1, test2, test3, test4};
 
 void test_all() {
   for (size_t i = 0; i < sizeof(pTests) / sizeof(pTests[0]); ++i) pTests[i]();
