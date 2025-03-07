@@ -8,11 +8,7 @@
 
 #include "rummikub.h"
 #include <algorithm>
-#include <iostream>
-#include <memory>
-#include <ostream>
-#include <utility>
-#include <vector>
+#include <iosfwd>
 
 // NOTE: The proffessor recommends making it work first and then optimizing.
 
@@ -97,7 +93,7 @@ std::pair<bool, size_t> find_index_by(const std::vector<T> &vec, F function) {
  */
 template<typename T, typename F, typename C>
 std::pair<bool, size_t>
-find_index_filter(const std::vector<T> &vec, F function, C filter) {
+find_index_qualified(const std::vector<T> &vec, F function, C filter) {
   std::pair<bool, size_t> output{false, 0};
 
   for (size_t i = 0; i < vec.size(); i++) {
@@ -120,10 +116,6 @@ void RummiKub::Add(Tile const &tile) { tiles.push_back(tile); }
 void RummiKub::Solve() {
   dbg("Solver Started\n\n");
 
-// BUG: If the hand is sorted, even the edge case in custom doesn't fail. This
-// must mean something is weird with the behaviour of the edge case that
-// causes the runs to be generated weirdly. Error probably related to
-// backtracking.
 #if SORT_HAND
   std::sort(
       tiles.begin(), tiles.end(), [](const Tile &a, const Tile &b) -> bool {
@@ -202,7 +194,7 @@ RummiKub::AddToRun::AddToRun(std::vector<std::vector<Tile>> &runs) :
     runs(runs) {}
 
 bool RummiKub::AddToRun::execute(const Tile &tile) {
-  std::pair<bool, size_t> color_index = find_index_filter(
+  std::pair<bool, size_t> color_index = find_index_qualified(
       runs,
       [tile](const std::vector<Tile> &run) -> bool {
         // Check if the tile is the right color
@@ -254,7 +246,9 @@ bool RummiKub::AddToGroup::execute(const Tile &tile) {
   std::pair<bool, size_t> denom_index = find_index_by(
       groups,
       [tile](const std::vector<Tile> &vec) -> bool { //
-        return vec.size() > 0 && vec.at(0).denomination == tile.denomination;
+        return vec.size() > 0 && //
+               vec.at(0).denomination == tile.denomination &&
+               vec.size() + 1 < 4;
       });
 
   if (not denom_index.first) {
@@ -290,74 +284,12 @@ RummiKub::CreateRun::CreateRun(std::vector<std::vector<Tile>> &runs) :
     runs(runs) {}
 
 bool RummiKub::CreateRun::execute(const Tile &tile) {
-  // TODO: Make this method actually see if it can join other 2 runs to create a
-  // new one. This way, even if the order is weird it will pick up that there
-  // are solutions.
-
-  /*for (size_t i = 0; i + 1 < runs.size(); i++) {*/
-  /*  // Check only for not yet valid runs*/
-  /*  if (!runs.at(i).empty() && runs.at(i).size() >= 3 &&*/
-  /*      runs.at(i).at(0).color == tile.color) {*/
-  /*    continue;*/
-  /*  }*/
-  /*  for (size_t j = i; j < runs.size(); j++) {*/
-  /*    // Check only for not yet valid runs*/
-  /*    if (!runs.at(j).empty() && runs.at(j).size() >= 3 &&*/
-  /*        runs.at(j).at(0).color == tile.color) {*/
-  /*      continue;*/
-  /*    }*/
-  /**/
-  /*    // Compare the two runs to see if there is a way to merge them into a*/
-  /*    // single larger one (undo is going to suck to do, but it is for the next*/
-  /*    // test so we'll deal with it when we get there)*/
-  /*    bool test = check_for_run_bridge(tile, runs.at(i), runs.at(j));*/
-  /**/
-  /*    if (!test) {*/
-  /*      continue;*/
-  /*    }*/
-  /**/
-  /*    // HACK: Erina left off here.*/
-  /*    // TODO: Merge the bridges here and record data required to the undo*/
-  /**/
-  /*    return true;*/
-  /*  }*/
-  /*}*/
-
   runs.emplace_back();
   runs.back().push_back(tile);
   return true;
 }
 
 void RummiKub::CreateRun::revert(const Tile &) { runs.pop_back(); }
-
-bool RummiKub::CreateRun::check_for_run_bridge(
-    const Tile &tile,
-    const std::vector<Tile> &run_a,
-    const std::vector<Tile> &run_b) {
-  for (size_t i = 0; i < run_a.size(); i++) {
-    for (size_t j = 0; j < run_b.size(); j++) {
-      int denom_a = run_a.at(i).denomination;
-      int denom_b = run_a.at(j).denomination;
-
-      // Checking if there is a diff of 2 meaning a single tile
-      if (std::abs(denom_a - denom_b) != 2) {
-        continue;
-      }
-
-      // If there is, then if the tile is between both it must mean that it
-      // is a bridge
-      bool a_then_b =
-          tile.denomination > denom_a && tile.denomination < denom_b;
-      bool b_then_a =
-          tile.denomination > denom_b && tile.denomination < denom_a;
-      if (a_then_b || b_then_a) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
 
 RummiKub::CreateGroup::CreateGroup(std::vector<std::vector<Tile>> &groups) :
     groups(groups) {}
