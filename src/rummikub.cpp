@@ -14,10 +14,12 @@
 #include <utility>
 #include <vector>
 
-// NOTE: The proffessor recommends making it work first and then optimizing
+// NOTE: The proffessor recommends making it work first and then optimizing.
 
-#define DEBUG 1
-#define SORT_HAND 0
+#define DEBUG 0
+
+// NOTE: You are allowed to sort the hand. Nature is healing.
+#define SORT_HAND 1
 
 #if DEBUG
 template<typename T, typename... Args>
@@ -292,34 +294,34 @@ bool RummiKub::CreateRun::execute(const Tile &tile) {
   // new one. This way, even if the order is weird it will pick up that there
   // are solutions.
 
-  for (size_t i = 0; i + 1 < runs.size(); i++) {
-    // Check only for not yet valid runs
-    if (!runs.at(i).empty() && runs.at(i).size() >= 3 &&
-        runs.at(i).at(0).color == tile.color) {
-      continue;
-    }
-    for (size_t j = i; j < runs.size(); j++) {
-      // Check only for not yet valid runs
-      if (!runs.at(j).empty() && runs.at(j).size() >= 3 &&
-          runs.at(j).at(0).color == tile.color) {
-        continue;
-      }
-
-      // Compare the two runs to see if there is a way to merge them into a
-      // single larger one (undo is going to suck to do, but it is for the next
-      // test so we'll deal with it when we get there)
-      bool test = check_for_run_bridge(tile, runs.at(i), runs.at(j));
-
-      if (!test) {
-        continue;
-      }
-
-      // HACK: Erina left off here.
-      // TODO: Merge the bridges here and record data required to the undo
-
-      return true;
-    }
-  }
+  /*for (size_t i = 0; i + 1 < runs.size(); i++) {*/
+  /*  // Check only for not yet valid runs*/
+  /*  if (!runs.at(i).empty() && runs.at(i).size() >= 3 &&*/
+  /*      runs.at(i).at(0).color == tile.color) {*/
+  /*    continue;*/
+  /*  }*/
+  /*  for (size_t j = i; j < runs.size(); j++) {*/
+  /*    // Check only for not yet valid runs*/
+  /*    if (!runs.at(j).empty() && runs.at(j).size() >= 3 &&*/
+  /*        runs.at(j).at(0).color == tile.color) {*/
+  /*      continue;*/
+  /*    }*/
+  /**/
+  /*    // Compare the two runs to see if there is a way to merge them into a*/
+  /*    // single larger one (undo is going to suck to do, but it is for the next*/
+  /*    // test so we'll deal with it when we get there)*/
+  /*    bool test = check_for_run_bridge(tile, runs.at(i), runs.at(j));*/
+  /**/
+  /*    if (!test) {*/
+  /*      continue;*/
+  /*    }*/
+  /**/
+  /*    // HACK: Erina left off here.*/
+  /*    // TODO: Merge the bridges here and record data required to the undo*/
+  /**/
+  /*    return true;*/
+  /*  }*/
+  /*}*/
 
   runs.emplace_back();
   runs.back().push_back(tile);
