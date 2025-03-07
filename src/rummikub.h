@@ -36,6 +36,9 @@ public:
   // if both vectors are empty - no solution possible
 
 private:
+  // Enables the printing of debug data
+  bool debug_print{false};
+
   std::vector<Tile> tiles{};
 
   // Group: a sequence
