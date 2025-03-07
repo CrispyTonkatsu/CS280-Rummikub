@@ -99,7 +99,6 @@ void RummiKub::Solve() {
 #if SORT_HAND
   std::sort(
       tiles.begin(), tiles.end(), [](const Tile &a, const Tile &b) -> bool {
-
         if (a.denomination == b.denomination) {
           return (a.color < b.color);
         }
