@@ -12,8 +12,6 @@
 #include <iostream>
 #include <ostream>
 
-// NOTE: The proffessor recommends making it work first and then optimizing.
-
 #define DEBUG 0
 
 // NOTE: You are allowed to sort the hand. Nature is healing.
