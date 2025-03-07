@@ -99,8 +99,14 @@ void RummiKub::Solve() {
 #if SORT_HAND
   std::sort(
       tiles.begin(), tiles.end(), [](const Tile &a, const Tile &b) -> bool {
-        return a.denomination < b.denomination;
+
+        if (a.denomination == b.denomination) {
+          return (a.color < b.color);
+        }
+
+        return (a.denomination < b.denomination);
       });
+  print_vector(tiles);
 #endif
 
   // Setting up the actions (with a level of indirection so that the vtable
@@ -115,8 +121,7 @@ void RummiKub::Solve() {
   solver_recurse(0, actions);
   tiles.clear();
 
-  print_runs();
-  print_groups();
+  print_solution();
 
   dbg("\nSolver terminated\n");
 }

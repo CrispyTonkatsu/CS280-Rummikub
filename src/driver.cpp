@@ -295,7 +295,7 @@ void test3()
   rks.Solve();
   // std::cout << "After Solve " << rks << std::endl;
   if (CheckSolution(rks, tiles)) {
-    std::cout << "Solved correctly\n";
+    /*std::cout << "Solved correctly\n";*/
   } else {
     std::cout << "Solved incorrectly\n";
     rks.print_solution();
@@ -308,7 +308,13 @@ void test4() {
   }
 }
 
-void (*pTests[])(void) = {test0, test1, test2, test3, test4};
+void test5() {
+  for (size_t i = 0; i < 10; i++) {
+    test4();
+  }
+}
+
+void (*pTests[])(void) = {test0, test1, test2, test3, test4, test5};
 
 void test_all() {
   for (size_t i = 0; i < sizeof(pTests) / sizeof(pTests[0]); ++i) pTests[i]();

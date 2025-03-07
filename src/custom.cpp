@@ -11,12 +11,34 @@ int main() {
   RummiKub rks;
   std::vector<Tile> tiles;
 
-  tiles.push_back({3, Red});
-  tiles.push_back({5, Red});
-  tiles.push_back({1, Red});
-  tiles.push_back({4, Red});
-  tiles.push_back({3, Red});
-  tiles.push_back({2, Red});
+  /*Tile { 12,Y } is not used in the solution*/
+  /*Tile { 6,B } is not used in the solution*/
+  /*Tile { 7,B } is not used in the solution*/
+  /*Tile { 9,Y } is not used in the solution*/
+  /*Tile { 5,B } is not used in the solution*/
+  /*Tile { 10,Y } is not used in the solution*/
+  /*Tile { 11,Y } is not used in the solution*/
+  /*Tile { 7,R } is not used in the solution*/
+  /*Tile { 7,R } is not used in the solution*/
+  /*Tile { 7,G } is not used in the solution*/
+  /*Tile { 7,Y } is not used in the solution*/
+  /*Tile { 4,B } is not used in the solution*/
+  /*Tile { 7,G } is not used in the solution*/
+  /*Solved incorrectly*/
+
+  tiles.push_back({12, Yellow});
+  tiles.push_back({6, Blue});
+  tiles.push_back({7, Blue});
+  tiles.push_back({9, Yellow});
+  tiles.push_back({5, Blue});
+  tiles.push_back({10, Yellow});
+  tiles.push_back({11, Yellow});
+  tiles.push_back({7, Red});
+  tiles.push_back({7, Red});
+  tiles.push_back({7, Green});
+  tiles.push_back({7, Yellow});
+  tiles.push_back({4, Blue});
+  tiles.push_back({7, Green});
 
   for (auto const &t: tiles) {
     rks.Add(t);
