@@ -15,3 +15,4 @@ add_compile_options(-fdiagnostics-color=always)
 
 # files to compile
 add_executable(driver_c ./src/driver.cpp ./src/rummikub.cpp)
+add_executable(custom ./src/custom.cpp ./src/rummikub.cpp)

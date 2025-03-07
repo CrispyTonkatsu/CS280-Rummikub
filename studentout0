@@ -1,1 +1,52 @@
+Solver Started
+
+print_runs
+
+print_runs
+Run
+{ 1,R }
+
+print_runs
+Run
+{ 1,R }
+{ 2,R }
+
+print_runs
+Run
+{ 1,R }
+{ 2,R }
+{ 3,R }
+
+print_runs
+Run
+{ 1,R }
+{ 2,R }
+{ 3,R }
+Run
+{ 3,R }
+
+print_runs
+Run
+{ 1,R }
+{ 2,R }
+{ 3,R }
+Run
+{ 3,R }
+{ 4,R }
+
+print_runs
+Run
+{ 1,R }
+{ 2,R }
+{ 3,R }
+Run
+{ 3,R }
+{ 4,R }
+{ 5,R }
+
+Validating Solution start
+Validating solution end: success
+
+
+Solver terminated
 Solved correctly

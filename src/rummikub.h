@@ -64,7 +64,8 @@ private:
     std::vector<size_t> inserts{};
   };
 
-  // 1) add it to an existing run with the same color as tile and tile's denomination is not yet in the run
+  // 1) add it to an existing run with the same color as tile and tile's
+  // denomination is not yet in the run
   struct AddToRun : Action {
     explicit AddToRun(std::vector<std::vector<Tile>> &runs);
 
@@ -75,7 +76,8 @@ private:
     std::vector<std::vector<Tile>> &runs;
   };
 
-  // 2) add it to an existing group with the same denomination as tile and tile's color is not yet in the group
+  // 2) add it to an existing group with the same denomination as tile and
+  // tile's color is not yet in the group
   struct AddToGroup : Action {
     explicit AddToGroup(std::vector<std::vector<Tile>> &groups);
 
@@ -95,6 +97,11 @@ private:
 
   private:
     std::vector<std::vector<Tile>> &runs;
+
+    bool check_for_run_bridge(
+        const Tile &tile,
+        const std::vector<Tile> &run_a,
+        const std::vector<Tile> &run_b);
   };
 
   // 4) create a new group
@@ -108,7 +115,8 @@ private:
     std::vector<std::vector<Tile>> &groups;
   };
 
-  bool solver_recurse(size_t current_tile, std::vector<std::unique_ptr<Action>> &actions);
+  bool solver_recurse(
+      size_t current_tile, std::vector<std::unique_ptr<Action>> &actions);
 
   bool validate_run(std::vector<Tile> &run);
 

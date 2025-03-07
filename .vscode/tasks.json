@@ -45,6 +45,14 @@
 			"dependsOn": [
 				"Build"
 			]
+		},
+		{
+			"label": "Run Custom To File",
+			"type": "shell",
+			"command": "./build/custom > custom_output.txt",
+			"dependsOn": [
+				"Build"
+			]
 		}
 	],
 	"inputs": [
