@@ -69,26 +69,6 @@ std::ostream &operator<<(std::ostream &os, Tile const &t) {
  * @param vec Reference to vector to look inside of.
  * @param function to call for looking inside the vector. Requires signature
  * bool(const T&).
- * @return Pair which means (success, index)
- */
-template<typename T, typename F>
-std::pair<bool, size_t> find_index_by(const std::vector<T> &vec, F function) {
-  for (size_t i = 0; i < vec.size(); i++) {
-    if (function(vec.at(i))) {
-      return std::make_pair(true, i);
-    }
-  }
-
-  return std::make_pair(false, 0);
-}
-
-/**
- * @brief Function to help find the index in a vector<T> by using function F.
- * This is to reduce the amount of searches that are boilerplate enough.
- *
- * @param vec Reference to vector to look inside of.
- * @param function to call for looking inside the vector. Requires signature
- * bool(const T&).
  * @param filter to call for comparing found indices. Requires signature
  * bool(const T&, const T&).
  * @return Pair which means (success, index)
