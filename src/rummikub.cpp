@@ -89,7 +89,7 @@ find_index_qualified(const std::vector<T> &vec, F function, C filter) {
   return output;
 }
 
-RummiKub::RummiKub() {};
+RummiKub::RummiKub() {}
 
 void RummiKub::Add(Tile const &tile) { tiles.push_back(tile); }
 
